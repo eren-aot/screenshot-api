@@ -4,6 +4,8 @@ import React from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+import axios from "axios"
+import toast from 'react-hot-toast'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -16,6 +18,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { imageStore } from '@/store/imageStore'
 
 
 const urlSchema = z.object({
@@ -33,8 +36,23 @@ const URLForm = (props: Props) => {
         },
     })
 
-    const onSubmit = (data: z.infer<typeof urlSchema>) => {
-        console.log(data)
+    const screenshots = imageStore((state:any) => state.screenshots)
+    const updateScreenshot = imageStore((state:any) => state.updateScreenshot)
+
+    const onSubmit = async (data: z.infer<typeof urlSchema>) => {
+        try {
+            // console.log(data);
+
+            const result = await axios.get(`/api/screenshot?url=${data.url}`, );
+            toast.success("Screenshot added")
+            // console.log(result)
+            console.log(result.data.screenshot)
+            updateScreenshot({screenshot : result.data.screenshot})
+        
+        }
+         catch (error) {
+            toast.error("Something went wrong!")
+        }
 
     }
 

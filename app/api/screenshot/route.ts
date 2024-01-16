@@ -38,6 +38,7 @@ export async function GET(request: NextRequest){
         await browser.close();
         const screenshotBuffer = Buffer.from(buffer);
         const screenshotBase64 = screenshotBuffer.toString('base64');
+        // console.log(screenshotBase64)
 
         return new Response(JSON.stringify({
           screenshot: screenshotBase64
